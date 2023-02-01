@@ -1,7 +1,6 @@
 function ImagePopup(props) {
     const { card, onClose } = props;
-    console.log(props)
-    const data = card === '' ? {
+    const data = card === null ? {
         visible: '',
         name: '#',
         link: '#'

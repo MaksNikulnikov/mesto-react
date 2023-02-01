@@ -1,5 +1,5 @@
 function PopupWithForm(props) {
-    const { title, name, isOpen, onClose, children } = props;
+    const { title, name, isOpen, onClose, buttonText='Сохранить', children } = props;
 
     return (
         <section className={`popup popup_${name} ${isOpen ? 'popup_opened' : ''}`}>
@@ -9,7 +9,7 @@ function PopupWithForm(props) {
                 <form name={name} className="popup__form" noValidate>
                     {children}
                     <button type="submit" className="popup__submit-btn">
-                        Сохранить
+                        {buttonText}
                     </button>
                 </form>
             </div>
