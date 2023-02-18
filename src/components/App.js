@@ -4,6 +4,8 @@ import Header from './Header';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import PopupWithForm from './PopupWithForm';
+import api from '../utils/Api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
 
@@ -11,6 +13,19 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const [currentUser, setCurrentUser] = React.useState({});
+
+  React.useEffect(() => {
+    api.getUserInfo()
+      .then(data =>{
+        setCurrentUser(data)
+        console.log('data was downloaded, currentUser >>', currentUser)
+        console.log('data was downloaded, data >>', data)
+      } )
+      .catch((e) => {
+        console.error(e)
+      });
+  }, []);
 
   const handleEditAvatarClick = function () {
     setIsEditAvatarPopupOpen(true);
@@ -45,60 +60,62 @@ function App() {
   }
 
   return (
-    <div className="root">
-      <Header />
-      <Main onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onCardClick={handleCardClick} />
-      <Footer />
-      <PopupWithForm name='add-profile'
-        title='Редактировать профиль'
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}>
-        <section className="popup__form-section">
-          <input name="name" onChange={onChange} type="text" placeholder="Имя" value="" className="popup__text popup__text_type_name"
-            required minLength="2" maxLength="40" />
-          <span className="popup__error"></span>
-        </section>
-        <section className="popup__form-section">
-          <input name="description" onChange={onChange} type="text" placeholder="Вид деятельности" value=""
-            className="popup__text popup__text_type_caption" required minLength="2" maxLength="200" />
-          <span className="popup__error"></span>
-        </section>
-      </PopupWithForm>
-      <PopupWithForm name='add-card'
-        title='Новое место'
-        isOpen={isAddPlacePopupOpen}
-        onClose={closeAllPopups}>
-        <section className="popup__form-section">
-          <input name="name" type="text" onChange={onChange} placeholder="Название" value=""
-            className="popup__text popup__text_type_name" required minLength="2" maxLength="30" />
-          <span className="popup__error"></span>
-        </section>
-        <section className="popup__form-section">
-          <input name="link" onChange={onChange} type="url" placeholder="Ссылка на картинку" value=""
-            className="popup__text popup__text_type_url" required />
-          <span className="popup__error"></span>
-        </section>
-      </PopupWithForm>
-      <ImagePopup card={selectedCard}
-        onClose={closeAllPopups} />
-      <PopupWithForm name='remove-card'
-        title='Вы уверены?'
-        isOpen={false}
-        buttonText='Да' />
-      <PopupWithForm name='change-profile-avatar'
-        title='Обновить аватар'
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}>
-        <section className="popup__form-section">
-          <input name="link" onChange={onChange} type="url" placeholder="https://somewebsite.com/someimage.jpg" value=""
-            className="popup__text popup__text_type_url" required />
-          <span className="popup__error"></span>
-        </section>
-      </PopupWithForm>
-    </div>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="root">
+        <Header />
+        <Main onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onCardClick={handleCardClick} />
+        <Footer />
+        <PopupWithForm name='add-profile'
+          title='Редактировать профиль'
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}>
+          <section className="popup__form-section">
+            <input name="name" onChange={onChange} type="text" placeholder="Имя" value="" className="popup__text popup__text_type_name"
+              required minLength="2" maxLength="40" />
+            <span className="popup__error"></span>
+          </section>
+          <section className="popup__form-section">
+            <input name="description" onChange={onChange} type="text" placeholder="Вид деятельности" value=""
+              className="popup__text popup__text_type_caption" required minLength="2" maxLength="200" />
+            <span className="popup__error"></span>
+          </section>
+        </PopupWithForm>
+        <PopupWithForm name='add-card'
+          title='Новое место'
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}>
+          <section className="popup__form-section">
+            <input name="name" type="text" onChange={onChange} placeholder="Название" value=""
+              className="popup__text popup__text_type_name" required minLength="2" maxLength="30" />
+            <span className="popup__error"></span>
+          </section>
+          <section className="popup__form-section">
+            <input name="link" onChange={onChange} type="url" placeholder="Ссылка на картинку" value=""
+              className="popup__text popup__text_type_url" required />
+            <span className="popup__error"></span>
+          </section>
+        </PopupWithForm>
+        <ImagePopup card={selectedCard}
+          onClose={closeAllPopups} />
+        <PopupWithForm name='remove-card'
+          title='Вы уверены?'
+          isOpen={false}
+          buttonText='Да' />
+        <PopupWithForm name='change-profile-avatar'
+          title='Обновить аватар'
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}>
+          <section className="popup__form-section">
+            <input name="link" onChange={onChange} type="url" placeholder="https://somewebsite.com/someimage.jpg" value=""
+              className="popup__text popup__text_type_url" required />
+            <span className="popup__error"></span>
+          </section>
+        </PopupWithForm>
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

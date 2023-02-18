@@ -1,3 +1,5 @@
+import React from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useEffect, useState } from 'react';
 import api from '../utils/Api';
 import Card from './Card';
@@ -8,22 +10,14 @@ function Main(props) {
         onEditAvatar,
         onCardClick } = props;
 
-    const [userData, setUserData] = useState({
-        userName: '',
-        userDescription: '',
-        userAvatar: '',
-    });
-
     const [cards, setCards] = useState([]);
+    const currentUser = React.useContext(CurrentUserContext);
+    console.log('currentUser >>',currentUser);
 
     useEffect(() => {
-        Promise.all([api.getUserInfo(), api.getCards()]).
-            then(([data, cardsData]) => {
-                setUserData({
-                    userName: data.name,
-                    userDescription: data.about,
-                    userAvatar: data.avatar,
-                });
+       api.getCards().
+            then((cardsData) => {
+                console.log(currentUser);
                 setCards(cardsData);
             }).
             catch((e) => {
@@ -34,12 +28,12 @@ function Main(props) {
     return (<main className="main">
         <section className="profile">
             <div className="profile__img-container" onClick={onEditAvatar} >
-                <img className="profile__image" src={userData.userAvatar} alt="аватар" />
+                <img className="profile__image" src={currentUser.avatar} alt="аватар" />
             </div>
             <div className="profile__info">
-                <h1 className="profile__title">{userData.userName}</h1>
+                <h1 className="profile__title">{currentUser.name}</h1>
                 <button type="button" onClick={onEditProfile} className="profile__edit-button"></button>
-                <p className="profile__subtitle">{userData.userDescription}</p>
+                <p className="profile__subtitle">{currentUser.about}</p>
             </div>
             <button type="button" onClick={onAddPlace} className="profile__add-button"></button>
         </section>
