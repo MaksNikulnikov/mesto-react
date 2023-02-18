@@ -1,27 +1,28 @@
 import React from 'react';
+import { useState } from 'react';
 import Main from './Main';
 import Header from './Header';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import PopupWithForm from './PopupWithForm';
 import api from '../utils/Api';
+
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
 
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null);
-  const [currentUser, setCurrentUser] = React.useState({});
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
 
   React.useEffect(() => {
     api.getUserInfo()
-      .then(data =>{
+      .then(data => {
         setCurrentUser(data)
-        console.log('data was downloaded, currentUser >>', currentUser)
-        console.log('data was downloaded, data >>', data)
-      } )
+      })
       .catch((e) => {
         console.error(e)
       });
@@ -59,6 +60,26 @@ function App() {
     setSelectedCard(null);
   }
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+  }
+
+  function handleCardDelete(card){
+    const isOwn = card.owner._id === currentUser._id;
+    if(isOwn){
+      api.deleteCard(card._id)
+      .then(response=>{
+        if(response.message==="Пост удалён"){
+          setCards(cards.filter(item=>item._id!==card._id))
+        }
+      })
+    }
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">
@@ -66,7 +87,11 @@ function App() {
         <Main onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick} />
+          onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          handleCards={setCards}
+          cards={cards} />
         <Footer />
         <PopupWithForm name='add-profile'
           title='Редактировать профиль'

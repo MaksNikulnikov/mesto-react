@@ -111,6 +111,10 @@ class Api {
         })
             .then(res => this._handleResponce(res));
     }
+
+    changeLikeCardStatus(cardId, isLiked){
+        return isLiked?this.putLike(cardId): this.deleteLike(cardId);
+    }
 }
 
 const api = new Api(apiConfig);

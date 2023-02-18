@@ -8,17 +8,18 @@ function Main(props) {
     const { onEditProfile,
         onAddPlace,
         onEditAvatar,
-        onCardClick } = props;
+        onCardClick,
+        onCardLike,
+        handleCards,
+        onCardDelete,
+        cards } = props;
 
-    const [cards, setCards] = useState([]);
     const currentUser = React.useContext(CurrentUserContext);
-    console.log('currentUser >>',currentUser);
 
     useEffect(() => {
-       api.getCards().
+        api.getCards().
             then((cardsData) => {
-                console.log(currentUser);
-                setCards(cardsData);
+                handleCards(cardsData);
             }).
             catch((e) => {
                 console.error(e)
@@ -43,7 +44,9 @@ function Main(props) {
                     return (
                         <Card card={card}
                             key={card._id}
-                            onCardClick={onCardClick} />
+                            onCardClick={onCardClick}
+                            onCardLike={onCardLike} 
+                            onCardDelete={onCardDelete}/>
                     )
                 })}
             </ul>
