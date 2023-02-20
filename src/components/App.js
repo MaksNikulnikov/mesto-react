@@ -10,6 +10,7 @@ import api from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
 
@@ -44,9 +45,6 @@ function App() {
 
   const handleCardClick = function (card) {
     setSelectedCard(card);
-  }
-
-  const onChange = function () {
   }
 
   const closeAllPopups = function () {
@@ -110,11 +108,18 @@ function App() {
       })
       .catch((e) => { console.error(e) });
   }
+  function handleAddPlaceSubmit(newCard) {
+    api.postCard(newCard).then(response => {
+      setCards([response, ...cards]);
+      setIsAddPlacePopupOpen(false);
+    })
+    .catch((e) => { console.error(e) });
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">
-        <Header/>
+        <Header />
         <Main onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
@@ -127,21 +132,9 @@ function App() {
         <EditProfilePopup isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser} />
-        <PopupWithForm name='add-card'
-          title='Новое место'
+        <AddPlacePopup onClose={closeAllPopups}
           isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}>
-          <section className="popup__form-section">
-            <input name="name" type="text" onChange={onChange} placeholder="Название" value=""
-              className="popup__text popup__text_type_name" required minLength="2" maxLength="30" />
-            <span className="popup__error"></span>
-          </section>
-          <section className="popup__form-section">
-            <input name="link" onChange={onChange} type="url" placeholder="Ссылка на картинку" value=""
-              className="popup__text popup__text_type_url" required />
-            <span className="popup__error"></span>
-          </section>
-        </PopupWithForm>
+          onSubmit={handleAddPlaceSubmit} />
         <ImagePopup card={selectedCard}
           onClose={closeAllPopups} />
         <PopupWithForm name='remove-card'
@@ -149,8 +142,8 @@ function App() {
           isOpen={false}
           buttonText='Да' />
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen}
-         onClose={closeAllPopups}
-         onUpdateAvatar={handleUpdateAvatar} />
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar} />
       </div>
     </CurrentUserContext.Provider>
   );
