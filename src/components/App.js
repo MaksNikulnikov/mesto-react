@@ -22,13 +22,13 @@ function App() {
   const [cards, setCards] = useState([]);
 
   React.useEffect(() => {
-    api.getUserInfo()
-      .then(data => {
-        setCurrentUser(data)
-      })
-      .catch((e) => {
-        console.error(e)
-      });
+    Promise.all([api.getUserInfo(), api.getCards()]).
+    then(([userData, cardsData])=>{
+      setCurrentUser(userData);
+      setCards(cardsData);
+    }).catch((e) => {
+      console.error(e)
+    });
   }, []);
 
   const handleEditAvatarClick = function () {
@@ -126,7 +126,6 @@ function App() {
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
-          handleCards={setCards}
           cards={cards} />
         <Footer />
         <EditProfilePopup isOpen={isEditProfilePopupOpen}
