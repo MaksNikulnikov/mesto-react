@@ -20,3 +20,5 @@
 * Работа с макетом в **Figma**
 * Cтруктура проекта по **БЭМ**
 * Система контроля версий **GIT**
+
+[Link to gh-pages](https://maksnikulnikov.github.io/mesto-react/)
