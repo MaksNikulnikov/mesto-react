@@ -4,9 +4,6 @@ import PopupWithForm from "./PopupWithForm";
 function EditAvatarPopup(props) {
   const { isOpen, onClose, onUpdateAvatar } = props;
   const imgRef = React.useRef('');
-  const handleChange = function (e) {
-    imgRef.current.value = e.target.value;
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -24,10 +21,8 @@ function EditAvatarPopup(props) {
       <div className="popup__form-section">
         <input name="link"
           ref={imgRef}
-          onChange={handleChange}
           type="url"
           placeholder="https://somewebsite.com/someimage.jpg"
-          value=''
           className="popup__text popup__text_type_url"
           required />
         <span className="popup__error"></span>
