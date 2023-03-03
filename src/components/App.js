@@ -6,11 +6,13 @@ import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import PopupWithForm from './PopupWithForm';
 import api from '../utils/Api';
-
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import { Route, Routes } from 'react-router-dom';
+import Register from './Register';
+import Login from './Login';
 
 function App() {
 
@@ -23,12 +25,12 @@ function App() {
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getCards()]).
-    then(([userData, cardsData])=>{
-      setCurrentUser(userData);
-      setCards(cardsData);
-    }).catch((e) => {
-      console.error(e)
-    });
+      then(([userData, cardsData]) => {
+        setCurrentUser(userData);
+        setCards(cardsData);
+      }).catch((e) => {
+        console.error(e)
+      });
   }, []);
 
   const handleEditAvatarClick = function () {
@@ -113,36 +115,43 @@ function App() {
       setCards([response, ...cards]);
       setIsAddPlacePopupOpen(false);
     })
-    .catch((e) => { console.error(e) });
+      .catch((e) => { console.error(e) });
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">
         <Header />
-        <Main onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards} />
-        <Footer />
-        <EditProfilePopup isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser} />
-        <AddPlacePopup onClose={closeAllPopups}
-          isOpen={isAddPlacePopupOpen}
-          onSubmit={handleAddPlaceSubmit} />
-        <ImagePopup card={selectedCard}
-          onClose={closeAllPopups} />
-        <PopupWithForm name='remove-card'
-          title='Вы уверены?'
-          isOpen={false}
-          buttonText='Да' />
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar} />
+        <Routes >
+          <Route path="/sign-up" element={<Register />} />
+          <Route path="/sign-in" element={<Login />} />
+          <Route path="/" element={<>
+            <Main onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              cards={cards} />
+            <Footer />
+            <EditProfilePopup isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser} />
+            <AddPlacePopup onClose={closeAllPopups}
+              isOpen={isAddPlacePopupOpen}
+              onSubmit={handleAddPlaceSubmit} />
+            <ImagePopup card={selectedCard}
+              onClose={closeAllPopups} />
+            <PopupWithForm name='remove-card'
+              title='Вы уверены?'
+              isOpen={false}
+              buttonText='Да' />
+            <EditAvatarPopup isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar} />
+          </>} />
+        </Routes>
+
       </div>
     </CurrentUserContext.Provider>
   );

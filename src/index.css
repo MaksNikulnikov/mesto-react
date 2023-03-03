@@ -43,3 +43,8 @@
 @import url('./blocks/element/__delete/_hidden/element__delete_hidden.css');
 @import url('./blocks/profile/__img-container/profile__img-container.css');
 @import url('./blocks/popup/_view-image/popup_view-image.css');
+@import url('./blocks/authorization-form/authorization-form.css');
+@import url('./blocks/authorization-form/__input/authorization-form__input.css');
+@import url('./blocks/authorization-form/__submit-btn/authorization-form__submit-btn.css');
+@import url('./blocks/authorization-form/__title/authorization-form__title.css');
+@import url('./blocks/authorization-form/__link-to-login/authorization-form__link-to-login.css');
