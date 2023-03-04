@@ -48,3 +48,5 @@
 @import url('./blocks/authorization-form/__submit-btn/authorization-form__submit-btn.css');
 @import url('./blocks/authorization-form/__title/authorization-form__title.css');
 @import url('./blocks/authorization-form/__link-to-login/authorization-form__link-to-login.css');
+@import url('./blocks/popup/__info-tooltip-image/popup__info-tooltip-image.css');
+@import url('./blocks/popup/__title/_info-tooltip/popup__title_info-tooltip.css');
