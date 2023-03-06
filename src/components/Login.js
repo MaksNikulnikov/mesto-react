@@ -4,7 +4,9 @@ import React from "react";
 export default function (props) {
     const onSubmit = function (e) {
         e.preventDefault();
-        console.log('onSubmit <Login/>')
+        props.onSubmit({ email, password });
+        setEmail('');
+        setPassword('');
     }
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -15,7 +17,7 @@ export default function (props) {
         setPassword(e.target.value);
     }
 
-    return (<>
+    return (<section className="authorization-form__container">
         <h2 className="authorization-form__title">{'Вход'}</h2>
         <AuthorizationForm
             onSubmit={onSubmit}
@@ -23,19 +25,23 @@ export default function (props) {
             buttonText='Войти'>
             <input name="email"
                 onChange={handleEmailChange}
-                type="text" placeholder="Email"
-                value={email || ''} className="authorization-form__input"
+                type="text"
+                placeholder="Email"
+                value={email || ''}
+                className="authorization-form__input"
                 required
                 minLength="2"
                 maxLength="40" />
             <input name="password"
                 onChange={handlePasswordChange}
-                type="password" placeholder="Пароль"
-                value={password || ''} className="authorization-form__input"
+                type="password"
+                placeholder="Пароль"
+                value={password || ''}
+                className="authorization-form__input"
                 required
                 minLength="2"
                 maxLength="40" />
         </AuthorizationForm>
-    </>
+    </section>
     )
 }

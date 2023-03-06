@@ -1,10 +1,13 @@
 import AuthorizationForm from "./AuthorizationForm";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function (props) {
     const onSubmit = function (e) {
         e.preventDefault();
-        console.log('onSubmit <Register/>')
+        props.onSubmit({ email, password });
+        setEmail('');
+        setPassword('');
     }
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -15,7 +18,7 @@ export default function (props) {
         setPassword(e.target.value);
     }
 
-    return (<>
+    return (<section className="authorization-form__container">
         <h2 className="authorization-form__title">{'Регистрация'}</h2>
         <AuthorizationForm
             onSubmit={onSubmit}
@@ -23,23 +26,28 @@ export default function (props) {
             buttonText='Зарегистрироваться'>
             <input name="email"
                 onChange={handleEmailChange}
-                type="text" placeholder="Email"
-                value={email || ''} className="authorization-form__input"
+                type="text"
+                placeholder="Email"
+                value={email || ''}
+                className="authorization-form__input"
                 required
                 minLength="2"
                 maxLength="40" />
             <input name="password"
                 onChange={handlePasswordChange}
-                type="password" placeholder="Пароль"
-                value={password || ''} className="authorization-form__input"
+                type="password"
+                placeholder="Пароль"
+                value={password || ''}
+                className="authorization-form__input"
                 required
                 minLength="2"
                 maxLength="40" />
         </AuthorizationForm>
-        <span
-            className="authorization-form__link-to-login">
-            {'Уже зарегистрированы? Войти'}
-        </span>
-    </>
+        <Link
+            className='authorization-form__link-to-login'
+            to='/sign-in'>
+            Уже зарегистрированы? Войти
+        </Link>
+    </section>
     )
 }

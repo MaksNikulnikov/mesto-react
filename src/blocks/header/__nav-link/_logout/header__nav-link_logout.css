@@ -1,0 +1,7 @@
+.header__nav-link_logout {
+    color: #A9A9A9;
+}
+
+.header__nav-link_logout:hover{
+    opacity: unset;
+}
